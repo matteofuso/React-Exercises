@@ -8,7 +8,7 @@ interface Props {
 
 function Board({ squares, turn, onChange }: Props) {
   return (
-    <div>
+    <div className="board">
       {squares.map((row, i) => (
         <div className="board-row" key={i}>
           {row.map((cell, j) => (
