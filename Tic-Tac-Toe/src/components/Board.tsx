@@ -1,29 +1,39 @@
 import Square from "./Square";
 
 interface Props {
-  squares: (string | null)[][];
-  turn: string;
-  onChange: (squares: (string | null)[][]) => void;
+  squares: (string | null)[];
+  turn?: string;
+  width?: number;
+  onChange?: (squares: (string | null)[]) => void;
 }
 
-function Board({ squares, turn, onChange }: Props) {
+function Board({
+  squares,
+  turn = "",
+  width = 300,
+  onChange = () => {},
+}: Props) {
   return (
-    <div className="board">
-      {squares.map((row, i) => (
-        <div className="board-row" key={i}>
-          {row.map((cell, j) => (
-            <Square
-              key={i * 3 + j}
-              value={cell}
-              onClick={() => {
-                if (squares[i][j] == null) {
-                  const newSquares = squares.map((row) => [...row]);
-                  newSquares[i][j] = turn;
-                  onChange(newSquares);
-                }
-              }}
-            ></Square>
-          ))}
+    <div className="board" style={{ width: width + "px" }}>
+      {[0, 1, 2].map((j) => (
+        <div className="board-row" key={j}>
+          {[0, 1, 2].map((k) => {
+            const i = j * 3 + k;
+            return (
+              <Square
+                key={i}
+                value={squares[i]}
+                textSize={(width / 3) * 0.7 + "px"}
+                onClick={() => {
+                  if (squares[i] == null) {
+                    const newSquares = [...squares];
+                    newSquares[i] = turn;
+                    onChange(newSquares);
+                  }
+                }}
+              ></Square>
+            );
+          })}
         </div>
       ))}
     </div>

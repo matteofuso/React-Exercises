@@ -6,12 +6,11 @@ body {
 
 .square {
   border: 1px solid #f1f1f1;
-  width: 100px;
-  height: 100px;
+  width: calc(100% / 3);
+  aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5em;
   font-family: "Centy Gothic", Futura, sans-serif;
 }
 
@@ -36,7 +35,7 @@ body {
   font-size: 1.5em;
 }
 
-.reset-button{
+.reset-button {
   width: 100%;
   margin-top: 20px;
   padding: 20px 0;
@@ -47,15 +46,32 @@ body {
   border: none;
 }
 
-.reset-button:hover{
+.reset-button:hover {
   background-color: #17636d;
   cursor: pointer;
 }
 
-.reset-button:click{
+.reset-button:click {
   background-color: #1bbbd0;
 }
 
-.reset-button.disabled{
+.reset-button.disabled {
   background-color: #1f1f1f;
+}
+
+.history-container{
+  width: 100%;
+}
+
+.match-history{
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 60px);
+  margin-top: 10px;
+  padding: 10px 30px;
+  border-radius: 20px;
+}
+
+.match-history:hover{
+  background-color: #212121;
 }
