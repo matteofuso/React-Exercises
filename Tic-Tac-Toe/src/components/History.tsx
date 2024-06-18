@@ -6,7 +6,7 @@ interface Props {
 }
 
 export interface Match {
-  winner: string;
+  winCombination: number[];
   squares: (string | null)[];
 }
 
@@ -14,14 +14,11 @@ function History({ history, onClick }: Props) {
   return (
     <div className="history-container">
       {history.map((match, i) => {
-        const { winner, squares } = match;
+        const { winCombination, squares } = match;
         return (
           <div key={i} className="match-history" onClick={() => onClick(i)}>
-            <p>{winner === "XY" ? "Draw": "Winner " + winner}</p>
-            <Board
-              width={50}
-              squares={squares}
-            ></Board>
+            <p>{winCombination.length == 0 ? "Draw" : "Winner " + squares[winCombination[0]]}</p>
+            <Board width={50} squares={squares} highlight={winCombination}></Board>
           </div>
         );
       })}

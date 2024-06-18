@@ -2,6 +2,7 @@ import Square from "./Square";
 
 interface Props {
   squares: (string | null)[];
+  highlight?: number[];
   turn?: string;
   width?: number;
   onChange?: (squares: (string | null)[]) => void;
@@ -11,6 +12,7 @@ function Board({
   squares,
   turn = "",
   width = 300,
+  highlight = [],
   onChange = () => {},
 }: Props) {
   return (
@@ -22,6 +24,7 @@ function Board({
             return (
               <Square
                 key={i}
+                highlight={highlight.includes(i)}
                 value={squares[i]}
                 textSize={(width / 3) * 0.7 + "px"}
                 onClick={() => {

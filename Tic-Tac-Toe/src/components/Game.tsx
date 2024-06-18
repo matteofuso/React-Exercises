@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Board from "./Board";
-import History, { Match } from './History';
+import History, { Match } from "./History";
 
-function CheckWinner(squares: (string | null)[]) {
+function CheckWinCombination(squares: (string | null)[]) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -13,17 +13,21 @@ function CheckWinner(squares: (string | null)[]) {
     [0, 4, 8],
     [2, 4, 6],
   ];
+  let combo = [];
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      combo.push(a, b, c);
     }
+  }
+  if (combo.length > 0) {
+    return combo;
   }
   // if squares contain null
   if (squares.includes(null)) {
     return null;
   }
-  return "XY";
+  return combo;
 }
 
 function Game() {
@@ -31,40 +35,44 @@ function Game() {
   const [squares, setSquares] = useState<(string | null)[]>(
     Array(9).fill(null)
   );
-  const [winner, setWinner] = useState<string | null>(null);
+  const [winCombination, setWinCombination] = useState<number[] | null>(null);
   const [matchLog, setMatchLog] = useState<Match[]>([]);
 
   return (
     <div className="board-card">
       <h1>
-        {winner == null
+        {winCombination == null
           ? "Next player: " + turn
-          : winner === "XY"
+          : winCombination.length === 0
           ? "Draw!"
-          : "Winner: " + winner}
+          : "Winner: " + squares[winCombination[0]]}
       </h1>
       <Board
         squares={squares}
         turn={turn}
+        highlight={winCombination || []}
         onChange={(squares) => {
-          if (winner == null) {
-            let winner = CheckWinner(squares);
+          if (winCombination == null) {
+            let winCombination = CheckWinCombination(squares);
             setSquares(squares);
             setTurn(turn === "X" ? "O" : "X");
-            setWinner(winner);
-            if (winner != null) {
-              setMatchLog([...matchLog, { winner: winner, squares: squares }]);
+            setWinCombination(winCombination);
+            if (winCombination != null) {
+              setMatchLog([
+                ...matchLog,
+                { winCombination: winCombination, squares: squares },
+              ]);
             }
           }
         }}
       ></Board>
       <button
-        className={"reset-button" + (winner == null ? " disabled" : "")}
+        className={"reset-button" + (winCombination == null ? " disabled" : "")}
         onClick={() => {
-          if (winner != null) {
+          if (winCombination != null) {
             setSquares(Array(9).fill(null));
             setTurn("X");
-            setWinner(null);
+            setWinCombination(null);
           }
         }}
       >
@@ -73,7 +81,10 @@ function Game() {
       <History
         history={matchLog}
         onClick={(i) => {
-          console.log(matchLog[i]);
+          if (winCombination != null) {
+            setSquares(matchLog[i].squares);
+            setWinCombination(matchLog[i].winCombination);
+          }
         }}
       ></History>
     </div>
