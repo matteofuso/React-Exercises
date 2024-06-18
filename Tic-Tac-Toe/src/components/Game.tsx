@@ -69,7 +69,8 @@ function Game() {
       <button
         className={"reset-button" + (winCombination == null ? " disabled" : "")}
         onClick={() => {
-          if (winCombination != null) {
+          // se la partita è finita o deve iniziare
+          if (winCombination != null || squares == Array(9).fill(null)) {
             setSquares(Array(9).fill(null));
             setTurn("X");
             setWinCombination(null);
@@ -81,7 +82,7 @@ function Game() {
       <History
         history={matchLog}
         onClick={(i) => {
-          if (winCombination != null) {
+          if (winCombination != null || i < matchLog.length) {
             setSquares(matchLog[i].squares);
             setWinCombination(matchLog[i].winCombination);
           }
